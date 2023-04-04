@@ -57,6 +57,12 @@ class Movie2Caption(object):
         sub_frames = frames[idx_taken]
         return sub_frames
     
+# 此方法的目的是在输入帧中添加视频结束帧。视频结束帧是一个零数组，
+# 其形状与输入帧中的最后一帧相同，只是其所有值均为-1。然后，该方法
+# 沿着第一个轴将此视频结束帧连接到输入帧上，并返回结果数组。
+# 在输入帧中添加视频结束帧的目的可能是为了在视频处理过程中标记视频的结束。
+# 这样，在处理视频帧时，程序可以检测到这个特殊的帧，并据此执行相应的操作，
+# 例如停止处理或执行其他任务。但是，具体原因取决于程序的实现和使用场景。
     def add_end_of_video_frame(self, frames):
         if len(frames.shape) == 4:
             # feat from conv layer
@@ -71,12 +77,19 @@ class Movie2Caption(object):
             raise NotImplementedError()
         frames = np.concatenate([frames, eos], axis=0)
         return frames
-    
+
+#             get_sub_frames 方法是 Movie2Caption 类的一个方法，它接受两个参数：frames 和 jpegs。此方法的目的是从输入帧中提取子帧。
+#             它首先检查 self.OutOf 是否为 None。如果是，则根据输入帧的长度执行不同的操作。如果输入帧的长度小于 self.K，则使用
+#             pad_frames 方法对输入帧进行填充，使其长度达到 self.K。否则，使用 extract_frames_equally_spaced 方法从输入帧中提
+#             取 self.K 个子帧。最后，如果 jpegs 为 True，则将结果转换为 numpy 数组并返回
     def get_sub_frames(self, frames, jpegs=False):
         # from all frames, take K of them, then add end of video frame
         # jpegs: to be compatible with visualizations
         if self.OutOf:
             raise NotImplementedError('OutOf has to be None')
+            # frames[:self.OutOf]用于从输入帧中提取子帧。如果 self.OutOf 不为 None，则此方法将从输入帧的开头提取 
+#             self.OutOf 个帧。这是通过使用切片操作 frames[:self.OutOf] 来实现的，
+#             它返回输入帧中从开头到索引 self.OutOf（不包括）的所有帧。  
             frames_ = frames[:self.OutOf]
             if len(frames_) < self.OutOf:
                 frames_ = self.pad_frames(frames_, self.OutOf, jpegs)
@@ -85,7 +98,9 @@ class Movie2Caption(object):
                 #frames_ = self.add_end_of_video_frame(frames)
                 frames_ = self.pad_frames(frames, self.K, jpegs)
             else:
-
+# extract_frames_equally_spaced 方法是 Movie2Caption 类的一个方法，它接受两个参数：frames 和 how_many。此方法的目的是
+# 从输入帧中提取子帧。它首先计算输入帧的数量，然后使用 np.array_split 函数将范围从 0 到输入帧数量的整数序列分成 self.K 个段。
+# 然后，它获取每个段的第一个元素的索引，并使用这些索引从输入帧中提取子帧。最后，返回提取的子帧。
                 frames_ = self.extract_frames_equally_spaced(frames, self.K)
                 #frames_ = self.add_end_of_video_frame(frames_)
         if jpegs:
