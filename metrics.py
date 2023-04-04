@@ -9,7 +9,8 @@ from collections import OrderedDict
 import data_engine
 from cocoeval import COCOScorer
 import utils
-    
+#它包含了多个函数，用于计算模型的性能指标。例如，score_with_cocoeval函数使用COCO评分器对有效样本和测试样本进行评分。
+#此外，该文件还包含了一些辅助函数，如update_params用于更新共享参数和模型参数，build_sample_pairs用于将样本和视频ID构建成一个有序字典。    
 MAXLEN = 50
 manager = Manager()
 
