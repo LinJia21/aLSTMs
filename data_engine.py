@@ -24,13 +24,15 @@ class Movie2Caption(object):
         self.non_pickable = []
         
         self.load_data()
-        
+    #_filter_googlenet 方法根据给定的视频 ID 加载特征文件，并使用 get_sub_frames 方法从特征中提取子帧。然后，它将提取的子帧赋值给变量 y，并在后面的代码中返回
+    #_filter_googlenet 的介绍网址https://zhuanlan.zhihu.com/p/185025947
     def _filter_googlenet(self, vidID):
         feat_file = os.path.join(self.FEAT_ROOT, vidID + '.npy')
         feat = np.load(feat_file)
         feat = self.get_sub_frames(feat)
         return feat
-    
+
+    # 此方法的目的是获取给定视频的特征。
     def get_video_features(self, vidID):
         if self.video_feature == 'googlenet':
             y = self._filter_googlenet(vidID)
