@@ -141,7 +141,11 @@ class Movie2Caption(object):
             raise NotImplementedError()
         
         return rval
-
+# The load_data method is a method of the Movie2Caption class. Its purpose is to load data for the Movie2Caption object. It loads train, 
+# valid, and test data from the specified dataset path and stores them in the object’s train, valid, and test attributes. It also loads 
+# the captions from the dataset path and stores them in the object’s CAP attribute. Additionally, it loads the word dictionary from the 
+# dataset path and stores it in the object’s word_ix attribute. The method also sets several other attributes of the object based on the 
+# loaded data and the object’s signature and video feature.
     def load_data(self):
 
         print 'loading %s %s features'%(self.signature, self.video_feature)
